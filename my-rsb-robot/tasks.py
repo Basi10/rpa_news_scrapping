@@ -1,6 +1,6 @@
 from robocorp.tasks import task
 from RPA.Browser.Selenium import Selenium
-from script.browser import Gothamist_Action
+from script.browser import GothamistAction
 from script import utils
 from RPA.Browser.Selenium import Selenium
 
@@ -12,7 +12,7 @@ def robot_spare_bin_python():
 
 def get_user_provided_work_item():
     sel = Selenium()
-    browser = Gothamist_Action(sel, url='https://gothamist.com/search')
+    browser = GothamistAction(sel, url='https://gothamist.com/search')
     browser.connect()
     phrase = browser.retrieve_work_item('news')
     browser.search_variable(phrase)
