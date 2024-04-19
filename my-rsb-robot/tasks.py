@@ -24,7 +24,7 @@ def get_user_provided_work_item():
         title = browser.retrive_title()
         image = browser.retrieve_image()
         date = browser.retrieve_date()
-        download = utils.download_image(image,'../output/')
+        download = utils.download_image(image,'./output/')
         desc_count = utils.count_keyword(description[i], phrase)
         title_count = utils.count_keyword(title,phrase)
         money_desc = utils.check_money(description[i])

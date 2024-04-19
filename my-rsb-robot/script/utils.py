@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 def export_data_to_excel(name, data):
-    file_path = '../output/{}.xlsx'.format(name)
+    file_path = './output/{}.xlsx'.format(name)
     excel = Files()
     if Path(file_path).is_file():
         excel.open_workbook(file_path)
