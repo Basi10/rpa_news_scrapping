@@ -21,7 +21,7 @@ def get_user_provided_work_item():
     data = []
     for i in range(len(refs)):
         browser.url = refs[i]
-        title = browser.retrive_title()
+        title = browser.retrieve_title()
         image = browser.retrieve_image()
         date = browser.retrieve_date()
         download = utils.download_image(image,'./output/')
