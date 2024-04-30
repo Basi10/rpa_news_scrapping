@@ -3,7 +3,7 @@ from typing import Union, List, Any
 from urllib.parse import ParseResult
 from RPA.Browser.Selenium import Selenium
 from RPA.Robocorp.WorkItems import WorkItems
-from script import logger
+import robocorp.log as logger
 from script.exceptions import ElementInteractionError
 from script.utils import (
     download_image,
@@ -31,7 +31,7 @@ class BrowserAction:
         """
         self.selenium = selenium
         self.selenium.set_selenium_timeout(timedelta(seconds=timeout_sec))
-        self.logger = logger.setup_logger(__name__, './output/browser_action.log')
+        self.logger = logger
         self.library = WorkItems()
 
     def connect(self, url: Union[str, ParseResult] = None) -> None:
@@ -58,10 +58,10 @@ class BrowserAction:
             try:
                 self.selenium.go_to(url)
             except Exception as e:
-                self.logger.error(f'Error opening url: {url} with the error: {e}')
+                self.logger.exception(f'Error opening url: {url} with the error: {e}')
                 raise Exception(f'Error opening url: {url} with the error: {e}')
         else:
-            self.logger.error("URL cannot be None")
+            self.logger.exception("URL cannot be None")
 
     def maximize(self):
         """
@@ -83,7 +83,7 @@ class BrowserAction:
             self.selenium.click_element(locator)
             self.logger.info("Button clicked")
         except Exception as e:
-            self.logger.error(f"Error clicking element: {e}")
+            self.logger.exception(f"Error clicking element: {e}")
             raise ElementInteractionError(f"Error clicking element: {e}")
 
     def _input_text(self, locator: str, text: str) -> None:
@@ -101,7 +101,7 @@ class BrowserAction:
             self.selenium.input_text(locator, text)
             self.logger.info("Successfully entered input text")
         except Exception as e:
-            self.logger.error(f"Error entering text: {e}")
+            self.logger.exception(f"Error entering text: {e}")
             raise ElementInteractionError(f"Error entering text: {e}")
 
     def _retrieve_elements(self, locator: str) -> List[Any]:
@@ -121,7 +121,7 @@ class BrowserAction:
             self.logger.info("Successfully retrieved elements")
             return elements
         except Exception as e:
-            self.logger.error(f"Error retrieving elements: {e}")
+            self.logger.exception(f"Error retrieving elements: {e}")
             raise ElementInteractionError(f"Error retrieving elements: {e}")
 
     def _retrieve_text(self, locator: str) -> str:
@@ -142,7 +142,7 @@ class BrowserAction:
             self.logger.info("Successfully retrieved elements")
             return text
         except Exception as e:
-            self.logger.error(f"Error retrieving elements: {e}")
+            self.logger.exception(f"Error retrieving elements: {e}")
             raise ElementInteractionError(f"Error retrieving elements: {e}")
 
     def _handle_invalid_action(self, action: str) -> None:
@@ -187,7 +187,7 @@ class BrowserAction:
             e.log_error(f"Error interacting with the element: {e}")
             raise ElementInteractionError(f"Error interacting with the element: {e}")
         except Exception as e:
-            self.logger.warning(e)
+            self.logger.exception(e)
             raise Exception(f"Error occurred while interacting with element: {e}")
 
     def retrieve_work_item(self, variable: str) -> str:
@@ -211,10 +211,10 @@ class BrowserAction:
             self.logger.info("Successfully retrieved work item")
             return item
         except KeyError:
-            self.logger.error(f"Variable '{variable}' not found in work item variables")
+            self.logger.exception(f"Variable '{variable}' not found in work item variables")
             raise Exception(f"Variable '{variable}' not found in work item variables")
         except Exception as e:
-            self.logger.error(f"Error retrieving work item: {e}")
+            self.logger.exception(f"Error retrieving work item: {e}")
             raise Exception(f"Error retrieving work item: {e}")
 
     def close_browser(self):
@@ -238,7 +238,7 @@ class GothamistAction(BrowserAction):
             selenium (Selenium): Instance of Selenium.
         """
         super().__init__(selenium)
-        # self.url = url
+
 
     def _search_variable(self, variable: str) -> None:
         """
@@ -306,7 +306,7 @@ class GothamistAction(BrowserAction):
             e.log_error(f"Error occurred while retrieving links: {e}")
             raise ElementInteractionError(f"Error occurred while retrieving links: {e}")
         except Exception as e:
-            self.logger.error(f"Error retrieving references: {e}")
+            self.logger.exception(f"Error retrieving references: {e}")
             raise Exception(f"Error occurred while retrieving links: {e}")
 
     def _retrieve_title(self) -> [bool, list]:
@@ -390,7 +390,7 @@ class GothamistAction(BrowserAction):
             e.log_error(f"Error occurred while retrieving news number: {e}")
             raise ElementInteractionError(f"Error occurred while retrieving news number: {e}")
         except Exception as e:
-            self.logger.error(f"Error occurred while retrieving news number: {e}")
+            self.logger.exception(f"Error occurred while retrieving news number: {e}")
             raise Exception(f"Error occurred while retrieving news number: {e}")
 
     def _handle_links(self, url: Union[str, ParseResult], description: str, search_phrase: str) -> dict:
@@ -456,6 +456,6 @@ class GothamistAction(BrowserAction):
             self.close_browser()
             raise ElementInteractionError(f"Error occurred while running the main script: {e}")
         except Exception as e:
-            self.logger.error(f"Error occurred while running the main script: {e}")
+            self.logger.exception(f"Error occurred while running the main script: {e}")
             self.close_browser()
             raise Exception(f"Error occurred while running the main script: {e}")
