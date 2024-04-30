@@ -1,13 +1,10 @@
-import os 
+import os
 import re
 import requests
 import uuid
 from datetime import datetime
 from RPA.Excel.Files import Files
 from pathlib import Path
-
-
-
 
 
 def export_data_to_excel(name, data):
@@ -19,9 +16,10 @@ def export_data_to_excel(name, data):
             excel.append_rows_to_worksheet(content=data)
             excel.save_workbook()
     else:
-        excel.create_workbook(name)    
-        excel.create_worksheet(name=name,content=data,header=True)
+        excel.create_workbook(name)
+        excel.create_worksheet(name=name, content=data, header=True)
         excel.save_workbook(file_path)
+
 
 def download_image(image_url, directory):
     response = requests.get(image_url)
@@ -37,12 +35,12 @@ def download_image(image_url, directory):
         return full_path
     else:
         print("Failed to download image")
-        
+
 
 def check_money(string):
     money_patterns = [
-        r'\$\d+(\.\d+)?',    
-        r'\d+\s*(dollars|USD)',   
+        r'\$\d+(\.\d+)?',
+        r'\d+\s*(dollars|USD)',
     ]
     combined_pattern = '|'.join(money_patterns)
     matches = re.findall(combined_pattern, string)
