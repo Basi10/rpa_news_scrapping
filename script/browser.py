@@ -239,7 +239,6 @@ class GothamistAction(BrowserAction):
         """
         super().__init__(selenium)
 
-
     def _search_variable(self, variable: str) -> None:
         """
         Search for a News phrase on the websites search page.
@@ -343,13 +342,14 @@ class GothamistAction(BrowserAction):
             self.logger.info("Retrieving image")
             image_source = self.element_interaction(locator=Selector.IMAGE, action='retrieve_elements')[
                 0].get_attribute("src")
+            image_name = self.element_interaction(locator=Selector.IMAGE_NAME, action='retrieve_text')
             self.logger.info("Successfully retrieved image")
-            return image_source
+            return image_source, image_name
         except ElementInteractionError as e:
             e.log_error(f"Error occurred while retrieving image: {e}")
             return None
         except Exception as e:
-            self.logger.warning(f"Error occurred while retrieving image: {e}")
+            self.logger.warn(f"Error occurred while retrieving image: {e}")
             return None
 
     def _retrieve_date(self) -> [bool, list]:
@@ -413,9 +413,10 @@ class GothamistAction(BrowserAction):
         self.browse(url)
         title = self._retrieve_title()
         date = self._retrieve_date()
-        image_source = download_image(self._retrieve_image(), Directories.IMAGE_DIRECTORY)
+        image_source, image_name = self._retrieve_image()
+        image_dir = download_image(image_source, image_name, Directories.IMAGE_DIRECTORY)
         return {"title": title, "date": date, "description": description,
-                "picture_filename": image_source, "count_phrases_title": count_keyword(title, search_phrase),
+                "picture_filename": image_dir, "count_phrases_title": count_keyword(title, search_phrase),
                 "count_phrases_description": count_keyword(description, search_phrase), 'contains_money_description':
                     check_money(description), 'contains_money_title': check_money(title)}
 
@@ -448,7 +449,7 @@ class GothamistAction(BrowserAction):
                     data.append(self._handle_links(url=links[i], description=description[i], search_phrase=news_phrase))
                 return data
             else:
-                self.logger.warning("No news available")
+                self.logger.warn("No news available")
                 self.close_browser()
                 return []
         except ElementInteractionError as e:
