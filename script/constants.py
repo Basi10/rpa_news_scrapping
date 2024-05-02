@@ -11,9 +11,9 @@ class Selector:
 
 
 class Directories:
-    IMAGE_DIRECTORY = './output/images'
+    IMAGE_DIRECTORY = './output/'
     LOG_DIRECTORY = './output/browser_action.log'
-    EXCEL_DIRECTORY = './output/{}.xlsx'
+    EXCEL_DIRECTORY = './output/'
     EXCEL_FILE_EXT = ".xlsx"
     SUPPORTED_IMAGE_FORMATS = [".jpg", ".jpeg", ".png"]
 
