@@ -3,6 +3,7 @@ class Selector:
     DATE = "xpath://p[@class='type-caption']"
     NEWS_NUMBER = "xpath://div[@class='search-page-results pt-2']/span/strong"
     IMAGE = "xpath://div[@class='image-with-caption-wrapper']//img"
+    IMAGE_NAME = "xpath://div[contains(@class,'flexible-link')][contains(@class,'image-with-caption-credit-link')]"
     LINKS = "xpath://a[contains(@class,'card-title-link')]"
     DESCRIPTION = "xpath://p[@class='desc']"
     SEARCH_INPUT = "xpath://input[@class='search-page-input']"
@@ -12,6 +13,9 @@ class Selector:
 class Directories:
     IMAGE_DIRECTORY = './output/images'
     LOG_DIRECTORY = './output/browser_action.log'
+    EXCEL_DIRECTORY = './output/{}.xlsx'
+    EXCEL_FILE_EXT = ".xlsx"
+    SUPPORTED_IMAGE_FORMATS = [".jpg", ".jpeg", ".png"]
 
 
 class URL:
